@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import com.sanger.springular.dto.GetUserDto;
 import com.sanger.springular.dto.UserDtoConverter;
 import com.sanger.springular.dto.ValidateUserDto;
+import com.sanger.springular.dto.ValidateUserTokenDto;
 import com.sanger.springular.jwt.JwtProvider;
 import com.sanger.springular.jwt.model.JwtUserResponse;
 import com.sanger.springular.jwt.model.LoginRequest;
@@ -67,6 +68,11 @@ public class AuthController {
     @GetMapping("/me")
     public GetUserDto me(@AuthenticationPrincipal UserEntity user) {
         return converter.convertUserEntityToGetUserDto(user);
+    }
+
+    @GetMapping("/validate-token")
+    public boolean validateUserToken(@Valid ValidateUserTokenDto userToken) {
+        return jwtProvider.validateToken(userToken.getToken());
     }
 
     @PutMapping("/validate-acount")
