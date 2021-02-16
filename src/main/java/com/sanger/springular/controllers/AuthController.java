@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.sanger.springular.dto.AuthenticationResponse;
 import com.sanger.springular.dto.GetUserDto;
 import com.sanger.springular.dto.UserDtoConverter;
 import com.sanger.springular.dto.ValidateUserDto;
@@ -13,6 +14,7 @@ import com.sanger.springular.jwt.model.JwtUserResponse;
 import com.sanger.springular.jwt.model.LoginRequest;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.model.UserRole;
+import com.sanger.springular.services.AuthService;
 import com.sanger.springular.services.VerificationTokenService;
 
 import org.springframework.http.HttpStatus;
@@ -41,20 +43,11 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final UserDtoConverter converter;
     private final VerificationTokenService verificationTokenService;
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtUserResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        UserEntity user = (UserEntity) auth.getPrincipal();
-
-        String jwtToken = jwtProvider.generateToken(auth);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(covertUserEntityAndTokenToJwtUserResponse(user, jwtToken));
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 
     private JwtUserResponse covertUserEntityAndTokenToJwtUserResponse(UserEntity user, String jwtToken) {
