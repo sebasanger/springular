@@ -1,4 +1,4 @@
-package com.sanger.springular.dto;
+package com.sanger.springular.dto.auth;
 
 import javax.validation.constraints.NotBlank;
 
@@ -13,11 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResetUserPasswordDto {
-
+public class ValidateUserTokenDto {
     @NotBlank
-    private String password;
-    @NotBlank
-    private String password2;
+    private String token;
 
 }

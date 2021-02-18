@@ -3,10 +3,10 @@ package com.sanger.springular.services;
 import java.util.Optional;
 
 import com.sanger.springular.controllers.FilesController;
-import com.sanger.springular.dto.ChangeUserPassword;
-import com.sanger.springular.dto.CreateUserDto;
-import com.sanger.springular.dto.UpdateUserDto;
-import com.sanger.springular.dto.UserDtoConverter;
+import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.CreateUserDto;
+import com.sanger.springular.dto.user.UpdateUserDto;
+import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.NewUserWithDifferentPasswordsException;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
 import com.sanger.springular.error.exceptions.UserNotFoundException;

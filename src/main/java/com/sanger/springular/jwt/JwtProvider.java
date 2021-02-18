@@ -1,6 +1,7 @@
 package com.sanger.springular.jwt;
 
 import java.nio.charset.Charset;
+import java.time.Instant;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.java.Log;
+import static java.util.Date.from;
 
 @Component
 @Log
@@ -31,7 +33,7 @@ public class JwtProvider {
     private String jwtSecreto;
 
     @Value("${jwt.token-expiration:86400}")
-    private int jwtDurationToken;
+    private Long jwtDurationToken;
 
     public String generateToken(Authentication auth) {
 
@@ -71,5 +73,15 @@ public class JwtProvider {
             log.info("Error inesperado" + ex);
         }
         return false;
+    }
+
+    public String generateTokenWithUserName(String username) {
+        return Jwts.builder().setSubject(username).setIssuedAt(from(Instant.now()))
+                .signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
+                .setExpiration(Date.from(Instant.now().plusMillis(jwtDurationToken))).compact();
+    }
+
+    public Long getJwtDurationToken() {
+        return jwtDurationToken;
     }
 }

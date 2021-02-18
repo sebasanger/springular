@@ -1,30 +1,27 @@
 package com.sanger.springular.controllers;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
-import com.sanger.springular.dto.AuthenticationResponse;
-import com.sanger.springular.dto.GetUserDto;
-import com.sanger.springular.dto.UserDtoConverter;
-import com.sanger.springular.dto.ValidateUserDto;
-import com.sanger.springular.dto.ValidateUserTokenDto;
+import com.sanger.springular.dto.auth.AuthenticationResponse;
+import com.sanger.springular.dto.auth.LoginRequestDto;
+import com.sanger.springular.dto.auth.RefreshTokenRequestDto;
+import com.sanger.springular.dto.auth.ValidateUserDto;
+import com.sanger.springular.dto.auth.ValidateUserTokenDto;
+import com.sanger.springular.dto.user.GetUserDto;
 import com.sanger.springular.jwt.JwtProvider;
-import com.sanger.springular.jwt.model.JwtUserResponse;
-import com.sanger.springular.jwt.model.LoginRequest;
+
 import com.sanger.springular.model.UserEntity;
-import com.sanger.springular.model.UserRole;
+
 import com.sanger.springular.services.AuthService;
+import com.sanger.springular.services.RefreshTokenService;
 import com.sanger.springular.services.VerificationTokenService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,22 +36,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
-    private final UserDtoConverter converter;
+    private final com.sanger.springular.dto.user.UserDtoConverter converter;
     private final VerificationTokenService verificationTokenService;
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+    public AuthenticationResponse login(@RequestBody LoginRequestDto loginRequest) {
         return authService.login(loginRequest);
     }
 
-    private JwtUserResponse covertUserEntityAndTokenToJwtUserResponse(UserEntity user, String jwtToken) {
-        return JwtUserResponse.jwtUserResponseBuilder().fullName(user.getFullName()).email(user.getEmail())
-                .username(user.getUsername()).avatar(user.getAvatar())
-                .roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).token(jwtToken)
-                .build();
+    @PostMapping("/refresh/token")
+    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequest) {
+        return authService.refreshToken(refreshTokenRequest);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
     }
 
     @PreAuthorize("isAuthenticated()")

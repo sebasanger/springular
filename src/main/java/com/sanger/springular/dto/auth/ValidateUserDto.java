@@ -1,4 +1,4 @@
-package com.sanger.springular.dto;
+package com.sanger.springular.dto.auth;
 
 import javax.validation.constraints.NotBlank;
 

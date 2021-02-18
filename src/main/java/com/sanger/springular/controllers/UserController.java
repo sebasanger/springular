@@ -3,12 +3,12 @@ package com.sanger.springular.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.sanger.springular.dto.ChangeUserPassword;
-import com.sanger.springular.dto.CreateUserDto;
-import com.sanger.springular.dto.GetUserDetailsDto;
-import com.sanger.springular.dto.GetUserDto;
-import com.sanger.springular.dto.UpdateUserDto;
-import com.sanger.springular.dto.UserDtoConverter;
+import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.CreateUserDto;
+import com.sanger.springular.dto.user.GetUserDetailsDto;
+import com.sanger.springular.dto.user.GetUserDto;
+import com.sanger.springular.dto.user.UpdateUserDto;
+import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.services.UserEntityService;

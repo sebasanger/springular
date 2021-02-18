@@ -2,7 +2,7 @@ package com.sanger.springular.jwt.model;
 
 import java.util.Set;
 
-import com.sanger.springular.dto.GetUserDto;
+import com.sanger.springular.dto.user.GetUserDto;
 
 import lombok.Builder;
 import lombok.Getter;

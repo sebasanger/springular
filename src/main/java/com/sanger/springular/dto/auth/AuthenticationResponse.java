@@ -1,4 +1,4 @@
-package com.sanger.springular.dto;
+package com.sanger.springular.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +16,5 @@ public class AuthenticationResponse {
     private String refreshToken;
     private Instant expiresAt;
     private String email;
+
 }

@@ -1,7 +1,7 @@
 package com.sanger.springular.controllers;
 
-import com.sanger.springular.dto.CreateResetPasswordTokenDto;
-import com.sanger.springular.dto.ResetUserPasswordDto;
+import com.sanger.springular.dto.auth.CreateResetPasswordTokenDto;
+import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.services.ResetPasswordTokenService;
 
 import org.springframework.http.ResponseEntity;

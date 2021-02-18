@@ -51,8 +51,14 @@ insert into user_entity_roles (user_entity_id, roles) values (9,'USER');
 
 insert into users (id, full_name, email, username, password, avatar, created_at, last_password_change_at,enabled) 
 values (8, 'Sebastian Sangermano', 'seba.sanger88@gmail.com','seba.sanger88@gmail.com','$2a$10$DBJhFdEGTeAqoLLsGfXwYObYXpt/amU0wpsRtKQtwJdC5n.MOXgxC','http://localhost:8080/files/1611675137259_ss-icon-27.jpg',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,true);
-    
+
 insert into user_entity_roles (user_entity_id, roles) values (8,'USER');
 insert into user_entity_roles (user_entity_id, roles) values (8,'ADMIN');
+
+
+insert into users (id, full_name, email, username, password, avatar, created_at, last_password_change_at,enabled) 
+values (10, 'Gabriel Sangermano', 'seba@hotmail.com','seba@hotmail.com','$2a$10$DBJhFdEGTeAqoLLsGfXwYObYXpt/amU0wpsRtKQtwJdC5n.MOXgxC','http://localhost:8080/files/1611675137259_ss-icon-27.jpg',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,true);
+      
+insert into user_entity_roles (user_entity_id, roles) values (10,'USER');
 
 

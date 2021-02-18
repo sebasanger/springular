@@ -3,7 +3,7 @@ package com.sanger.springular.services;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.sanger.springular.dto.ResetUserPasswordDto;
+import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.PasswordResetToken;

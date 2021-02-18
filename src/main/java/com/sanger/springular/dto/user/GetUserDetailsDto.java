@@ -1,8 +1,6 @@
-package com.sanger.springular.dto;
+package com.sanger.springular.dto.user;
 
 import java.util.Set;
-
-import com.sanger.springular.model.UserRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateUserDto {
-    private Long id;
+public class GetUserDetailsDto {
+
     private String username;
     private String avatar;
-    private String fullname;
+    private String fullName;
     private String email;
-    private Set<UserRole> roles;
-
+    private Set<String> roles;
+    private boolean enabled;
 }

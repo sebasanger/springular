@@ -3,7 +3,7 @@ package com.sanger.springular.services;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.sanger.springular.dto.ValidateUserDto;
+import com.sanger.springular.dto.auth.ValidateUserDto;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.model.VerificationToken;
