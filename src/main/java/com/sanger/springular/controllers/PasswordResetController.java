@@ -1,11 +1,12 @@
 package com.sanger.springular.controllers;
 
+import javax.validation.Valid;
+
 import com.sanger.springular.dto.auth.CreateResetPasswordTokenDto;
 import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.services.ResetPasswordTokenService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,9 @@ public class PasswordResetController {
 
     }
 
-    @PostMapping("/change-password/{token}")
-    public ResponseEntity<String> changePassword(@RequestBody ResetUserPasswordDto resetPasswordTokenDto,
-            @PathVariable String token) {
-        resetPasswordTokenService.validateVerificationToken(resetPasswordTokenDto, token);
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@Valid @RequestBody ResetUserPasswordDto resetPasswordTokenDto) {
+        resetPasswordTokenService.validateVerificationToken(resetPasswordTokenDto);
         return ResponseEntity.noContent().build();
 
     }

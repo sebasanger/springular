@@ -6,6 +6,7 @@ import java.util.Date;
 import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
+import com.sanger.springular.error.exceptions.ValidationTokenInvalidException;
 import com.sanger.springular.model.PasswordResetToken;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.repository.PasswordResetTokenRepository;
@@ -65,10 +66,10 @@ public class ResetPasswordTokenService extends BaseService<PasswordResetToken, L
         return token;
     }
 
-    public String validateVerificationToken(ResetUserPasswordDto resetPasswordTokenDto, String token) {
-        final PasswordResetToken verificationToken = this.repository.findByToken(token);
+    public String validateVerificationToken(ResetUserPasswordDto resetPasswordTokenDto) {
+        final PasswordResetToken verificationToken = this.repository.findByToken(resetPasswordTokenDto.getToken());
         if (verificationToken == null) {
-            return TOKEN_INVALID;
+            throw new ValidationTokenInvalidException();
         }
         final UserEntity user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();

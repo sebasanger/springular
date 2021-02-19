@@ -19,5 +19,7 @@ public class ResetUserPasswordDto {
     private String password;
     @NotBlank
     private String password2;
+    @NotBlank
+    private String token;
 
 }
