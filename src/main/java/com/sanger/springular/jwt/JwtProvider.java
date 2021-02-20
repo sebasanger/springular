@@ -1,5 +1,7 @@
 package com.sanger.springular.jwt;
 
+import static java.util.Date.from;
+
 import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.Date;
@@ -20,7 +22,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.java.Log;
-import static java.util.Date.from;
 
 @Component
 @Log
