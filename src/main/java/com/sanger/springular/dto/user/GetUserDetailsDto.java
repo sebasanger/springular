@@ -1,5 +1,6 @@
 package com.sanger.springular.dto.user;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -21,4 +22,7 @@ public class GetUserDetailsDto {
     private String email;
     private Set<String> roles;
     private boolean enabled;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastPasswordChangeAt;
+
 }

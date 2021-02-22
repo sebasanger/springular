@@ -1,21 +1,24 @@
 package com.sanger.springular.controllers;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.GetUserDetailsDto;
 import com.sanger.springular.dto.user.GetUserDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
+import com.sanger.springular.dto.user.UserDto;
 import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.services.UserEntityService;
-import com.sanger.springular.utils.pagination.PaginationLinksUtils;
+import com.sanger.springular.views.UsersViews;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,34 +43,19 @@ public class UserController {
 
 	private final UserEntityService userEntityService;
 	private final UserDtoConverter userDtoConverter;
-	private final PaginationLinksUtils paginationLinksUtils;
-
-	@GetMapping("/")
-	public ResponseEntity<?> listUsers(Pageable pageable, HttpServletRequest request) {
-		Page<UserEntity> result = userEntityService.findAll(pageable);
-
-		if (result.isEmpty()) {
-			throw new UserNotFoundException();
-		} else {
-
-			UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
-
-			return ResponseEntity.ok().header("link", paginationLinksUtils.createLinkHeader(result, uriBuilder))
-					.body(result);
-
-		}
-	}
 
 	@GetMapping("")
-	public ResponseEntity<?> filterUsers(@RequestParam String filter, Pageable pageable, HttpServletRequest request) {
+	public ResponseEntity<?> listUsers(
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+			@RequestParam(defaultValue = "") String filter) {
 		Page<UserEntity> result = userEntityService.filterUser(filter, pageable);
+
 		if (result.isEmpty()) {
 			throw new UserNotFoundException();
 		} else {
-			UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
+			Page<GetUserDto> dtoList = result.map(userDtoConverter::convertUserEntityToGetUserDto);
 
-			return ResponseEntity.ok().header("link", paginationLinksUtils.createLinkHeader(result, uriBuilder))
-					.body(result);
+			return ResponseEntity.ok().body(dtoList);
 		}
 	}
 
