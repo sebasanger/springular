@@ -17,9 +17,9 @@ public class UserDtoConverter {
 	private final PasswordEncoder passwordEncoder;
 
 	public GetUserDto convertUserEntityToGetUserDto(UserEntity user) {
-		return GetUserDto.builder().username(user.getUsername()).avatar(user.getAvatar()).fullName(user.getFullName())
-				.email(user.getEmail()).roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet()))
-				.build();
+		return GetUserDto.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
+				.fullName(user.getFullName()).email(user.getEmail())
+				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).build();
 	}
 
 	public GetUserDetailsDto convertUserEntityToGetUserDetailsDto(UserEntity user) {

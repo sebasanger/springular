@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class GetUserDto {
-
+	private Long id;
 	private String username;
 	private String avatar;
 	private String fullName;
