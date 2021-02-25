@@ -2,6 +2,9 @@ package com.sanger.springular.dto.user;
 
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.sanger.springular.model.UserRole;
 
 import lombok.AllArgsConstructor;
@@ -16,10 +19,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UpdateUserDto {
+    @NotNull
     private Long id;
-    private String username;
     private String avatar;
-    private String fullname;
+    @NotBlank
+    private String fullName;
+    @NotBlank
     private String email;
     private Set<UserRole> roles;
 

@@ -37,8 +37,8 @@ public class UserDtoConverter {
 	}
 
 	public UserEntity convertUpdateUserDtoToUserEntity(UpdateUserDto user) {
-		return UserEntity.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
-				.fullName(user.getFullname()).email(user.getEmail()).roles(user.getRoles()).build();
+		return UserEntity.builder().id(user.getId()).username(user.getEmail()).avatar(user.getAvatar())
+				.fullName(user.getFullName()).email(user.getEmail()).roles(user.getRoles()).build();
 	}
 
 }

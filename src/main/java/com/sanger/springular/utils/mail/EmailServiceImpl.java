@@ -16,8 +16,8 @@ public class EmailServiceImpl implements EmailService {
 
         var mail = new SimpleMailMessage();
 
-        mail.setTo(toEmail);
-        mail.setSubject(subject);
+        mail.setTo("seba_sanger@hotmail.com");
+        mail.setSubject("seba_sanger@hotmail.com");
         mail.setText(message);
 
         mail.setFrom("seba_springular@gmail.com");
