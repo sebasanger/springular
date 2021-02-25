@@ -16,23 +16,23 @@ public class UserDtoConverter {
 
 	private final PasswordEncoder passwordEncoder;
 
-	public GetUserDto convertUserEntityToGetUserDto(UserEntity user) {
-		return GetUserDto.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
+	public GetUsersDto convertUserEntityToGetUserDto(UserEntity user) {
+		return GetUsersDto.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
 				.fullName(user.getFullName()).email(user.getEmail())
 				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).build();
 	}
 
 	public GetUserDetailsDto convertUserEntityToGetUserDetailsDto(UserEntity user) {
-		return GetUserDetailsDto.builder().username(user.getUsername()).avatar(user.getAvatar())
+		return GetUserDetailsDto.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
 				.fullName(user.getFullName()).email(user.getEmail()).enabled(user.isEnabled())
 				.createdAt(user.getCreatedAt()).lastPasswordChangeAt(user.getLastPasswordChangeAt())
 				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).build();
 	}
 
 	public UserEntity convertCreateUserDtoToUserEntity(CreateUserDto newUser) {
-		return UserEntity.builder().username(newUser.getUsername())
-				.password(passwordEncoder.encode(newUser.getPassword())).avatar(newUser.getAvatar())
-				.fullName(newUser.getFullname()).email(newUser.getEmail()).roles(newUser.getRoles()).enabled(false)
+		return UserEntity.builder().username(newUser.getEmail())
+				.password(passwordEncoder.encode("myPasswordEncoded12313123")).avatar(newUser.getAvatar())
+				.fullName(newUser.getFullName()).email(newUser.getEmail()).roles(newUser.getRoles()).enabled(false)
 				.build();
 	}
 

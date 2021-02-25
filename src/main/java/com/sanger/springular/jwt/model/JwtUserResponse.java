@@ -2,17 +2,15 @@ package com.sanger.springular.jwt.model;
 
 import java.util.Set;
 
-import com.sanger.springular.dto.user.GetUserDto;
+import com.sanger.springular.dto.user.GetUsersDto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class JwtUserResponse extends GetUserDto {
+public class JwtUserResponse extends GetUsersDto {
     private String token;
 
     @Builder(builderMethodName = "jwtUserResponseBuilder")

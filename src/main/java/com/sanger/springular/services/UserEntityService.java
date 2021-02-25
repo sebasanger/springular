@@ -7,7 +7,6 @@ import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
 import com.sanger.springular.dto.user.UserDtoConverter;
-import com.sanger.springular.error.exceptions.NewUserWithDifferentPasswordsException;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.UserEntity;
@@ -60,26 +59,26 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 	 * @param newUser
 	 * @return
 	 */
-	public UserEntity newUser(CreateUserDto newUser) throws NewUserWithDifferentPasswordsException {
-		if (newUser.getPassword().contentEquals(newUser.getPassword2())) {
-			UserEntity userEntity = userDtoConverter.convertCreateUserDtoToUserEntity(newUser);
-			UserEntity userSaved = save(userEntity);
-			verificationTokenService.sendEmailVerification(userSaved, newUser.getUrlRedirect());
+	public UserEntity newUser(CreateUserDto newUser) {
 
-			return userSaved;
-		} else {
-			throw new NewUserWithDifferentPasswordsException();
-		}
+		UserEntity userEntity = userDtoConverter.convertCreateUserDtoToUserEntity(newUser);
+		UserEntity userSaved = save(userEntity);
+		verificationTokenService.sendEmailVerification(userSaved, newUser.getUrlRedirect());
+
+		return userSaved;
+
 	}
 
+	// TODO verificar si existe otro usuario con el email seleccionado
 	public UserEntity updateUser(UpdateUserDto user) {
 
 		try {
 			UserEntity userEntity = findById(user.getId()).orElseThrow(() -> new UserNotFoundException(user.getId()));
+
 			userEntity = userDtoConverter.convertUpdateUserDtoToUserEntity(user);
 			return update(userEntity);
 		} catch (DataIntegrityViolationException ex) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya existe");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email del usuario ya existe");
 		} catch (UserNotFoundException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario no existe");
 		}

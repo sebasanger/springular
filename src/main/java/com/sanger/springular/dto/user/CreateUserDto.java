@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.sanger.springular.model.UserRole;
 
+import org.hibernate.validator.constraints.Length;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,26 +22,19 @@ import lombok.Setter;
 @Builder
 public class CreateUserDto {
 
-	@NotBlank
-	private String username;
-
 	private String avatar;
 
 	@NotBlank
-	private String fullname;
+	@Length(min = 5, max = 50, message = "minimo de caracteres 5 y maximo 50")
+	private String fullName;
 
 	@NotBlank
-	@Email(message = "Must be a valid email")
+	@Email(message = "Tiene que ser un email valido")
 	private String email;
-
-	@NotBlank
-	private String password;
-
-	@NotBlank
-	private String password2;
 
 	private Set<UserRole> roles;
 
+	@NotBlank
 	private String urlRedirect;
 
 }

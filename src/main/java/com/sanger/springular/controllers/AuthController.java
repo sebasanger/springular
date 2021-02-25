@@ -7,11 +7,9 @@ import com.sanger.springular.dto.auth.LoginRequestDto;
 import com.sanger.springular.dto.auth.RefreshTokenRequestDto;
 import com.sanger.springular.dto.auth.ValidateUserDto;
 import com.sanger.springular.dto.auth.ValidateUserTokenDto;
-import com.sanger.springular.dto.user.GetUserDto;
+import com.sanger.springular.dto.user.GetUsersDto;
 import com.sanger.springular.jwt.JwtProvider;
-
 import com.sanger.springular.model.UserEntity;
-
 import com.sanger.springular.services.AuthService;
 import com.sanger.springular.services.RefreshTokenService;
 import com.sanger.springular.services.VerificationTokenService;
@@ -19,9 +17,7 @@ import com.sanger.springular.services.VerificationTokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,7 +56,7 @@ public class AuthController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public GetUserDto me(@AuthenticationPrincipal UserEntity user) {
+    public GetUsersDto me(@AuthenticationPrincipal UserEntity user) {
         return converter.convertUserEntityToGetUserDto(user);
     }
 

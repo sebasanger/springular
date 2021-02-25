@@ -2,18 +2,15 @@ package com.sanger.springular.controllers;
 
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.GetUserDetailsDto;
-import com.sanger.springular.dto.user.GetUserDto;
+import com.sanger.springular.dto.user.GetUsersDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
-import com.sanger.springular.dto.user.UserDto;
 import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.services.UserEntityService;
-import com.sanger.springular.views.UsersViews;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +50,7 @@ public class UserController {
 		if (result.isEmpty()) {
 			throw new UserNotFoundException();
 		} else {
-			Page<GetUserDto> dtoList = result.map(userDtoConverter::convertUserEntityToGetUserDto);
+			Page<GetUsersDto> dtoList = result.map(userDtoConverter::convertUserEntityToGetUserDto);
 
 			return ResponseEntity.ok().body(dtoList);
 		}
@@ -67,21 +64,21 @@ public class UserController {
 
 	}
 
-	@PostMapping("/")
-	public ResponseEntity<GetUserDto> newUser(@Valid @RequestBody CreateUserDto newUser) {
+	@PostMapping("")
+	public ResponseEntity<GetUsersDto> newUser(@Valid @RequestBody CreateUserDto newUser) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.newUser(newUser)));
 	}
 
-	@PutMapping("/")
-	public ResponseEntity<GetUserDto> updateUser(@Valid @RequestBody UpdateUserDto user) {
+	@PutMapping("")
+	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateUser(user)));
 
 	}
 
 	@PutMapping("/changePassword")
-	public ResponseEntity<GetUserDto> updateUser(@Valid @RequestBody ChangeUserPassword user) {
+	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody ChangeUserPassword user) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updatePassword(user)));
 
