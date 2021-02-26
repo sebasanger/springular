@@ -1,25 +1,24 @@
 package com.sanger.springular.services;
 
+import java.time.Instant;
+
 import com.sanger.springular.dto.auth.AuthenticationResponse;
 import com.sanger.springular.dto.auth.LoginRequestDto;
 import com.sanger.springular.dto.auth.RefreshTokenRequestDto;
 import com.sanger.springular.jwt.JwtProvider;
-
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.repository.UserEntityRepository;
 
-import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -37,7 +36,7 @@ public class AuthService {
                 org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
                                 .getContext().getAuthentication().getPrincipal();
                 return userRepository.findByUsername(principal.getUsername()).orElseThrow(
-                                () -> new UsernameNotFoundException("User  not found - " + principal.getUsername()));
+                                () -> new UsernameNotFoundException("User not found - " + principal.getUsername()));
         }
 
         public AuthenticationResponse refreshToken(RefreshTokenRequestDto refreshTokenRequest) {

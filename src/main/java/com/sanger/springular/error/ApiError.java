@@ -3,10 +3,10 @@ package com.sanger.springular.error;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
+import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,11 +23,11 @@ import lombok.Setter;
 public class ApiError {
 
 	@NonNull
-	private HttpStatus estado;
+	private HttpStatus status;
 	@JsonFormat(shape = Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-	private LocalDateTime fecha = LocalDateTime.now();
+	private LocalDateTime date = LocalDateTime.now();
 	@NonNull
-	private String mensaje;
+	private String message;
 	private Map<String, String> errors;
 
 }
