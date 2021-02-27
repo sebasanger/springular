@@ -6,6 +6,7 @@ import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.GetUserDetailsDto;
 import com.sanger.springular.dto.user.GetUsersDto;
+import com.sanger.springular.dto.user.UpdateAcountDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
 import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
@@ -74,6 +75,13 @@ public class UserController {
 	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateUser(user)));
+
+	}
+
+	@PutMapping("/update-acount")
+	public ResponseEntity<GetUserDetailsDto> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(userDtoConverter.convertUserEntityToGetUserDetailsDto(userEntityService.updateAcount(user)));
 
 	}
 

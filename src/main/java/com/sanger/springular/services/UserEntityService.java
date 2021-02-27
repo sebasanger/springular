@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.sanger.springular.controllers.FilesController;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CreateUserDto;
+import com.sanger.springular.dto.user.UpdateAcountDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
 import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
@@ -81,6 +82,19 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email del usuario ya existe");
 		} catch (UserNotFoundException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario no existe");
+		}
+
+	}
+
+	public UserEntity updateAcount(UpdateAcountDto user) {
+
+		try {
+			UserEntity userEntity = findById(user.getId()).orElseThrow(() -> new UserNotFoundException());
+
+			userEntity = userDtoConverter.convertUpdateAcountDtoToUserEntity(user);
+			return update(userEntity);
+		} catch (Exception ex) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
 		}
 
 	}
