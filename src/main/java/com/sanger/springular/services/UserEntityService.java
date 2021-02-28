@@ -2,8 +2,11 @@ package com.sanger.springular.services;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.sanger.springular.controllers.FilesController;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.CheckEmailIsValidDto;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.UpdateAcountDto;
 import com.sanger.springular.dto.user.UpdateUserDto;
@@ -138,6 +141,12 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 		this.save(user);
 
 		return user;
+
+	}
+
+	public boolean checkEmailIsValid(CheckEmailIsValidDto checkEmailIsValidDto) {
+		return this.repository.findByEmailAndIdNot(checkEmailIsValidDto.getEmail(), checkEmailIsValidDto.getId())
+				.isPresent();
 
 	}
 

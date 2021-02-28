@@ -3,6 +3,7 @@ package com.sanger.springular.controllers;
 import javax.validation.Valid;
 
 import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.CheckEmailIsValidDto;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.GetUserDetailsDto;
 import com.sanger.springular.dto.user.GetUsersDto;
@@ -79,10 +80,9 @@ public class UserController {
 	}
 
 	@PutMapping("/update-acount")
-	public ResponseEntity<GetUserDetailsDto> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(userDtoConverter.convertUserEntityToGetUserDetailsDto(userEntityService.updateAcount(user)));
-
+	public ResponseEntity<Void> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
+		userEntityService.updateAcount(user);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/changePassword")
@@ -118,6 +118,11 @@ public class UserController {
 	@PutMapping(value = "/upload/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void nuevoProducto(@RequestPart("file") MultipartFile file, @RequestPart("username") String username) {
 		userEntityService.uploadAvatar(file, username);
+	}
+
+	@PostMapping("/checkEmailIsValid")
+	public boolean checkEmailIsValid(@Valid @RequestBody CheckEmailIsValidDto checkEmailIsValidDto) {
+		return userEntityService.checkEmailIsValid(checkEmailIsValidDto);
 	}
 
 }
