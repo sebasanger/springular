@@ -18,7 +18,6 @@ import com.sanger.springular.repository.UserEntityRepository;
 import com.sanger.springular.services.base.BaseService;
 import com.sanger.springular.utils.upload.StorageService;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -73,28 +72,31 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 
 	}
 
-	// TODO verificar si existe otro usuario con el email seleccionado
-	public UserEntity updateUser(UpdateUserDto user) {
+	public UserEntity updateUser(UpdateUserDto updateUserDto) {
 
 		try {
-			UserEntity userEntity = findById(user.getId()).orElseThrow(() -> new UserNotFoundException(user.getId()));
+			UserEntity userEntity = findById(updateUserDto.getId())
+					.orElseThrow(() -> new UserNotFoundException(updateUserDto.getId()));
 
-			userEntity = userDtoConverter.convertUpdateUserDtoToUserEntity(user);
+			userEntity.setFullName(updateUserDto.getFullName());
+			userEntity.setAvatar(updateUserDto.getEmail());
+			userEntity.setEmail(updateUserDto.getEmail());
+			userEntity.setRoles(updateUserDto.getRoles());
 			return update(userEntity);
-		} catch (DataIntegrityViolationException ex) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email del usuario ya existe");
 		} catch (UserNotFoundException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario no existe");
 		}
 
 	}
 
-	public UserEntity updateAcount(UpdateAcountDto user) {
+	public UserEntity updateAcount(UpdateAcountDto updateAcountDto) {
 
 		try {
-			UserEntity userEntity = findById(user.getId()).orElseThrow(() -> new UserNotFoundException());
+			UserEntity userEntity = findById(updateAcountDto.getId()).orElseThrow(() -> new UserNotFoundException());
 
-			userEntity = userDtoConverter.convertUpdateAcountDtoToUserEntity(user);
+			userEntity.setEmail(updateAcountDto.getEmail());
+			userEntity.setUsername(updateAcountDto.getEmail());
+			userEntity.setAvatar(updateAcountDto.getAvatar());
 			return update(userEntity);
 		} catch (Exception ex) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());

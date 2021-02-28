@@ -7,9 +7,9 @@ import java.util.Map;
 import com.sanger.springular.error.exceptions.LoteNotFoundException;
 import com.sanger.springular.error.exceptions.NewUserWithDifferentPasswordsException;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
-import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.error.exceptions.ProductoNotFoundException;
 import com.sanger.springular.error.exceptions.SearchProductoNoResultException;
+import com.sanger.springular.error.exceptions.UserNotFoundException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 			errors.put(fieldName, errorMessage);
 		});
 
-		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, LocalDateTime.now(), "Error de validacion", errors);
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, LocalDateTime.now(), "Validation error", errors);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
 	}
 

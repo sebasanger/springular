@@ -55,6 +55,7 @@ public class UserEntity implements UserDetails {
 
 	private String fullName;
 
+	@Column(unique = true)
 	private String email;
 
 	private String image;

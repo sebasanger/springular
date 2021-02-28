@@ -80,9 +80,10 @@ public class UserController {
 	}
 
 	@PutMapping("/update-acount")
-	public ResponseEntity<Void> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
-		userEntityService.updateAcount(user);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<GetUsersDto> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateAcount(user)));
+
 	}
 
 	@PutMapping("/changePassword")
