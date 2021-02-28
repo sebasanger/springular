@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.model.UserRole;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,10 @@ public class UserDtoConverter {
 
 	private final PasswordEncoder passwordEncoder;
 
+	private final ModelMapper modelMapper;
+
 	public GetUsersDto convertUserEntityToGetUserDto(UserEntity user) {
-		return GetUsersDto.builder().id(user.getId()).username(user.getUsername()).avatar(user.getAvatar())
-				.fullName(user.getFullName()).email(user.getEmail())
-				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).build();
+		return modelMapper.map(user, GetUsersDto.class);
 	}
 
 	public GetUserDetailsDto convertUserEntityToGetUserDetailsDto(UserEntity user) {
@@ -42,7 +43,7 @@ public class UserDtoConverter {
 	}
 
 	public UserEntity convertUpdateAcountDtoToUserEntity(UpdateAcountDto user) {
-		return UserEntity.builder().avatar(user.getAvatar()).email(user.getEmail()).build();
+		return modelMapper.map(user, UserEntity.class);
 	}
 
 }

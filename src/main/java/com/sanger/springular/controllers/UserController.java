@@ -79,9 +79,9 @@ public class UserController {
 	}
 
 	@PutMapping("/update-acount")
-	public ResponseEntity<GetUserDetailsDto> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
+	public ResponseEntity<GetUsersDto> updateAcount(@Valid @RequestBody UpdateAcountDto user) {
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(userDtoConverter.convertUserEntityToGetUserDetailsDto(userEntityService.updateAcount(user)));
+				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateAcount(user)));
 
 	}
 
