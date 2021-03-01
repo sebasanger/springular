@@ -6,6 +6,7 @@ import com.sanger.springular.dto.auth.CreateResetPasswordTokenDto;
 import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.services.ResetPasswordTokenService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +31,10 @@ public class PasswordResetController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@Valid @RequestBody ResetUserPasswordDto resetPasswordTokenDto) {
-        resetPasswordTokenService.validateVerificationToken(resetPasswordTokenDto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Boolean> changePassword(@Valid @RequestBody ResetUserPasswordDto resetPasswordTokenDto) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(resetPasswordTokenService.validateVerificationToken(resetPasswordTokenDto));
 
     }
 }

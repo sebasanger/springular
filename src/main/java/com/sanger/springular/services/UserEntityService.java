@@ -2,8 +2,6 @@ package com.sanger.springular.services;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import com.sanger.springular.controllers.FilesController;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
 import com.sanger.springular.dto.user.CheckEmailIsValidDto;

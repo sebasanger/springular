@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.sanger.springular.dto.auth.ValidateUserDto;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
+import com.sanger.springular.error.exceptions.TokenExpiredException;
+import com.sanger.springular.error.exceptions.TokenInvalidException;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.model.VerificationToken;
 import com.sanger.springular.repository.UserEntityRepository;
@@ -42,8 +44,8 @@ public class VerificationTokenService extends BaseService<VerificationToken, Lon
      */
     public void sendEmailVerification(UserEntity user, String urlRedirect) {
         String token = createVerificationTokenForUser(user);
-        emailService.sendMail(user.getEmail(), user.getFullName(), "Welcome " + user.getFullName()
-                + " follow this link to activate your acount " + urlRedirect + "/" + token);
+        emailService.sendMail(user.getEmail(), user.getFullName(),
+                "Welcome " + user.getFullName() + " follow this link to activate your acount " + urlRedirect + token);
     }
 
     public String createVerificationTokenForUser(UserEntity user) {
@@ -64,22 +66,23 @@ public class VerificationTokenService extends BaseService<VerificationToken, Lon
         return token;
     }
 
-    public String validateVerificationToken(ValidateUserDto validation) {
+    public boolean validateVerificationToken(ValidateUserDto validation) {
         final VerificationToken verificationToken = this.repository.findByToken(validation.getToken());
         if (verificationToken == null) {
-            return TOKEN_INVALID;
+            throw new TokenInvalidException();
         }
         final UserEntity user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             this.repository.delete(verificationToken);
-            return TOKEN_EXPIRED;
+            throw new TokenExpiredException();
+
         } else if (validation.getPassword().equals(validation.getPassword2())) {
             user.setEnabled(true);
             user.setPassword(passwordEncoder.encode(validation.getPassword()));
             userEntityRepository.save(user);
             this.repository.delete(verificationToken);
-            return TOKEN_VALID;
+            return true;
         } else {
             throw new PasswordNotMismatch();
         }

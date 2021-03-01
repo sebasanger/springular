@@ -66,7 +66,7 @@ public class AuthController {
     }
 
     @PutMapping("/validate-acount")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody ValidateUserDto validation) {
+    public ResponseEntity<Boolean> updateUser(@Valid @RequestBody ValidateUserDto validation) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(verificationTokenService.validateVerificationToken(validation));
 

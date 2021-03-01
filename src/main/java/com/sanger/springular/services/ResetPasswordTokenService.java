@@ -5,8 +5,9 @@ import java.util.Date;
 
 import com.sanger.springular.dto.auth.ResetUserPasswordDto;
 import com.sanger.springular.error.exceptions.PasswordNotMismatch;
+import com.sanger.springular.error.exceptions.TokenExpiredException;
+import com.sanger.springular.error.exceptions.TokenInvalidException;
 import com.sanger.springular.error.exceptions.UserNotFoundException;
-import com.sanger.springular.error.exceptions.ValidationTokenInvalidException;
 import com.sanger.springular.model.PasswordResetToken;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.repository.PasswordResetTokenRepository;
@@ -66,22 +67,22 @@ public class ResetPasswordTokenService extends BaseService<PasswordResetToken, L
         return token;
     }
 
-    public String validateVerificationToken(ResetUserPasswordDto resetPasswordTokenDto) {
+    public boolean validateVerificationToken(ResetUserPasswordDto resetPasswordTokenDto) {
         final PasswordResetToken verificationToken = this.repository.findByToken(resetPasswordTokenDto.getToken());
         if (verificationToken == null) {
-            throw new ValidationTokenInvalidException();
+            throw new TokenInvalidException();
         }
         final UserEntity user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             this.repository.delete(verificationToken);
-            return TOKEN_EXPIRED;
+            throw new TokenExpiredException();
         } else if (resetPasswordTokenDto.getPassword().equals(resetPasswordTokenDto.getPassword2())) {
             user.setEnabled(true);
             user.setPassword(passwordEncoder.encode(resetPasswordTokenDto.getPassword()));
             userEntityRepository.save(user);
             this.repository.delete(verificationToken);
-            return TOKEN_VALID;
+            return true;
         } else {
             throw new PasswordNotMismatch();
         }
