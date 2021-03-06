@@ -125,7 +125,7 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 		return userEntity.isEnabled();
 	}
 
-	public UserEntity uploadAvatar(MultipartFile file, String username) {
+	public UserEntity uploadAvatar(MultipartFile file, Long id) {
 		String urlImage = null;
 
 		if (!file.isEmpty()) {
@@ -134,7 +134,7 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 					.toUriString();
 		}
 
-		UserEntity user = this.repository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+		UserEntity user = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
 		user.setAvatar(urlImage);
 

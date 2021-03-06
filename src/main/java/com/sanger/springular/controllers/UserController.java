@@ -116,9 +116,9 @@ public class UserController {
 	 * @param nuevo
 	 * @return 201 y el producto insertado
 	 */
-	@PutMapping(value = "/upload/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void nuevoProducto(@RequestPart("file") MultipartFile file, @RequestPart("username") String username) {
-		userEntityService.uploadAvatar(file, username);
+	@PutMapping(value = "/upload/image/{id}")
+	public void nuevoProducto(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
+		userEntityService.uploadAvatar(file, id);
 	}
 
 	@PostMapping("/checkEmailIsValid")
