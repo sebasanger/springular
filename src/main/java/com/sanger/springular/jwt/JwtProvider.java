@@ -76,10 +76,14 @@ public class JwtProvider {
         return false;
     }
 
-    public String generateTokenWithUserName(String username) {
-        return Jwts.builder().setSubject(username).setIssuedAt(from(Instant.now()))
-                .signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
-                .setExpiration(Date.from(Instant.now().plusMillis(jwtDurationToken))).compact();
+    public String generateTokenWithEmail(UserEntity user) {
+        Date tokenExpirationDate = new Date(System.currentTimeMillis() + (this.jwtDurationToken * 1000));
+
+        return Jwts.builder().signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
+                .setHeaderParam("type", TOKEN_TYPE).setSubject(Long.toString(user.getId())).setIssuedAt(new Date())
+                .setExpiration(tokenExpirationDate).claim("fullname", user.getFullName())
+                .claim("roles", user.getRoles().stream().map(UserRole::name).collect(Collectors.joining(", ")))
+                .compact();
     }
 
     public Long getJwtDurationToken() {

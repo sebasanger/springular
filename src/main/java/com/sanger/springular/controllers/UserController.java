@@ -3,6 +3,7 @@ package com.sanger.springular.controllers;
 import javax.validation.Valid;
 
 import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.ChangeImageResponseDto;
 import com.sanger.springular.dto.user.CheckEmailIsValidDto;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.GetUserDetailsDto;
@@ -19,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,13 +92,6 @@ public class UserController {
 
 	}
 
-	/**
-	 * Borra un usuario en base a su id
-	 * 
-	 * @param id
-	 * @return Código 204 sin contenido
-	 * @throws UserNotFoundException
-	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> borrarUsuario(@PathVariable Long id) {
 
@@ -110,15 +102,11 @@ public class UserController {
 
 	}
 
-	/**
-	 * cambiar la imagen del usuario
-	 * 
-	 * @param nuevo
-	 * @return 201 y el producto insertado
-	 */
 	@PutMapping(value = "/upload/image/{id}")
-	public void nuevoProducto(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
-		userEntityService.uploadAvatar(file, id);
+	public ResponseEntity<ChangeImageResponseDto> nuevoProducto(@RequestParam("file") MultipartFile file,
+			@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(userEntityService.uploadAvatar(file, id));
+
 	}
 
 	@PostMapping("/checkEmailIsValid")

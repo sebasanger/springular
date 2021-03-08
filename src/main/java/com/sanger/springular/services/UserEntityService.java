@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.sanger.springular.controllers.FilesController;
 import com.sanger.springular.dto.auth.ChangeUserPassword;
+import com.sanger.springular.dto.user.ChangeImageResponseDto;
 import com.sanger.springular.dto.user.CheckEmailIsValidDto;
 import com.sanger.springular.dto.user.CreateUserDto;
 import com.sanger.springular.dto.user.UpdateAcountDto;
@@ -14,6 +15,7 @@ import com.sanger.springular.error.exceptions.UserNotFoundException;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.repository.UserEntityRepository;
 import com.sanger.springular.services.base.BaseService;
+import com.sanger.springular.utils.upload.StorageException;
 import com.sanger.springular.utils.upload.StorageService;
 
 import org.springframework.data.domain.Page;
@@ -125,22 +127,26 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 		return userEntity.isEnabled();
 	}
 
-	public UserEntity uploadAvatar(MultipartFile file, Long id) {
-		String urlImage = null;
-
-		if (!file.isEmpty()) {
-			String image = storageService.store(file);
-			urlImage = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "serveFile", image, null).build()
-					.toUriString();
+	public ChangeImageResponseDto uploadAvatar(MultipartFile file, Long id) {
+		if (file.isEmpty()) {
+			throw new StorageException("Image not found");
 		}
 
+		String urlImage = null;
+
+		String image = storageService.store(file);
+		urlImage = MvcUriComponentsBuilder.fromMethodName(FilesController.class, "serveFile", image, null).build()
+				.toUriString();
+
 		UserEntity user = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException());
+
+		storageService.delete(user.getAvatar());
 
 		user.setAvatar(urlImage);
 
 		this.save(user);
 
-		return user;
+		return new ChangeImageResponseDto(user.getId(), urlImage);
 
 	}
 

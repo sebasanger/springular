@@ -41,7 +41,9 @@ public class AuthService {
 
         public AuthenticationResponse refreshToken(RefreshTokenRequestDto refreshTokenRequest) {
                 refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
-                String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getEmail());
+                UserEntity user = userRepository.findByEmail(refreshTokenRequest.getEmail())
+                                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                String token = jwtProvider.generateTokenWithEmail(user);
                 return AuthenticationResponse.builder().authenticationToken(token)
                                 .refreshToken(refreshTokenRequest.getRefreshToken())
                                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtDurationToken()))
