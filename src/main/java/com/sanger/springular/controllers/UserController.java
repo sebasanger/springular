@@ -105,7 +105,7 @@ public class UserController {
 	@PutMapping(value = "/upload/image/{id}")
 	public ResponseEntity<ChangeImageResponseDto> nuevoProducto(@RequestParam("file") MultipartFile file,
 			@PathVariable Long id) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(userEntityService.uploadAvatar(file, id));
+		return ResponseEntity.status(HttpStatus.CREATED).body(userEntityService.uploadAvatarAndDeleteOld(file, id));
 
 	}
 

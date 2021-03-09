@@ -42,7 +42,7 @@ public class JwtProvider {
         return Jwts.builder().signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
                 .setHeaderParam("type", TOKEN_TYPE).setSubject(Long.toString(user.getId())).setIssuedAt(new Date())
                 .setExpiration(tokenExpirationDate).claim("fullname", user.getFullName())
-                .claim("email", user.getEmail())
+                .claim("email", user.getEmail()).claim("avatar", user.getAvatar())
                 .claim("roles", user.getRoles().stream().map(UserRole::name).collect(Collectors.joining(", ")))
                 .compact();
 
@@ -80,7 +80,7 @@ public class JwtProvider {
         return Jwts.builder().signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
                 .setHeaderParam("type", TOKEN_TYPE).setSubject(Long.toString(user.getId())).setIssuedAt(new Date())
                 .setExpiration(tokenExpirationDate).claim("fullname", user.getFullName())
-                .claim("email", user.getEmail())
+                .claim("email", user.getEmail()).claim("avatar", user.getAvatar())
                 .claim("roles", user.getRoles().stream().map(UserRole::name).collect(Collectors.joining(", ")))
                 .compact();
     }

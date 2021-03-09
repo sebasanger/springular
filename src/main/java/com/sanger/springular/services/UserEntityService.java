@@ -127,7 +127,7 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 		return userEntity.isEnabled();
 	}
 
-	public ChangeImageResponseDto uploadAvatar(MultipartFile file, Long id) {
+	public ChangeImageResponseDto uploadAvatarAndDeleteOld(MultipartFile file, Long id) {
 		if (file.isEmpty()) {
 			throw new StorageException("Image not found");
 		}
@@ -140,7 +140,7 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 
 		UserEntity user = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
-		storageService.delete(user.getAvatar());
+		deleteUserAvatarIfExist(user);
 
 		user.setAvatar(urlImage);
 
@@ -148,6 +148,17 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 
 		return new ChangeImageResponseDto(user.getId(), urlImage);
 
+	}
+
+	public void deleteUserAvatarIfExist(UserEntity user) {
+		if (user.getAvatar() != null) {
+			try {
+				storageService.delete(user.getAvatar());
+			} catch (Exception e) {
+
+			}
+
+		}
 	}
 
 	public boolean checkEmailIsValid(CheckEmailIsValidDto checkEmailIsValidDto) {
