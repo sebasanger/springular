@@ -1,9 +1,6 @@
 package com.sanger.springular.jwt;
 
-import static java.util.Date.from;
-
 import java.nio.charset.Charset;
-import java.time.Instant;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -45,6 +42,7 @@ public class JwtProvider {
         return Jwts.builder().signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
                 .setHeaderParam("type", TOKEN_TYPE).setSubject(Long.toString(user.getId())).setIssuedAt(new Date())
                 .setExpiration(tokenExpirationDate).claim("fullname", user.getFullName())
+                .claim("email", user.getEmail())
                 .claim("roles", user.getRoles().stream().map(UserRole::name).collect(Collectors.joining(", ")))
                 .compact();
 
@@ -82,6 +80,7 @@ public class JwtProvider {
         return Jwts.builder().signWith(Keys.hmacShaKeyFor(jwtSecreto.getBytes()), SignatureAlgorithm.HS256)
                 .setHeaderParam("type", TOKEN_TYPE).setSubject(Long.toString(user.getId())).setIssuedAt(new Date())
                 .setExpiration(tokenExpirationDate).claim("fullname", user.getFullName())
+                .claim("email", user.getEmail())
                 .claim("roles", user.getRoles().stream().map(UserRole::name).collect(Collectors.joining(", ")))
                 .compact();
     }
