@@ -5,6 +5,8 @@ import java.time.Instant;
 import com.sanger.springular.dto.auth.AuthenticationResponse;
 import com.sanger.springular.dto.auth.LoginRequestDto;
 import com.sanger.springular.dto.auth.RefreshTokenRequestDto;
+import com.sanger.springular.dto.auth.RefreshTokenResponse;
+import com.sanger.springular.dto.user.UserDtoConverter;
 import com.sanger.springular.jwt.JwtProvider;
 import com.sanger.springular.model.UserEntity;
 import com.sanger.springular.repository.UserEntityRepository;
@@ -28,7 +30,7 @@ public class AuthService {
         private final RefreshTokenService refreshTokenService;
         private final UserEntityRepository userRepository;
         private final AuthenticationManager authenticationManager;
-
+        private final UserDtoConverter userDtoConverter;
         private final JwtProvider jwtProvider;
 
         @Transactional(readOnly = true)
@@ -39,18 +41,19 @@ public class AuthService {
                                 () -> new UsernameNotFoundException("User not found - " + principal.getUsername()));
         }
 
-        public AuthenticationResponse refreshToken(RefreshTokenRequestDto refreshTokenRequest) {
+        public RefreshTokenResponse refreshToken(RefreshTokenRequestDto refreshTokenRequest) {
                 refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
                 UserEntity user = userRepository.findByEmail(refreshTokenRequest.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 String token = jwtProvider.generateTokenWithEmail(user);
-                return AuthenticationResponse.builder().authenticationToken(token)
+                return RefreshTokenResponse.builder().authenticationToken(token)
                                 .refreshToken(refreshTokenRequest.getRefreshToken())
-                                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtDurationToken()))
-                                .email(refreshTokenRequest.getEmail()).build();
+                                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtDurationToken())).build();
         }
 
         public AuthenticationResponse login(LoginRequestDto loginRequest) {
+                UserEntity user = userRepository.findByEmail(loginRequest.getEmail())
+                                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 Authentication authenticate = authenticationManager
                                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
                                                 loginRequest.getPassword()));
@@ -59,7 +62,7 @@ public class AuthService {
                 return AuthenticationResponse.builder().authenticationToken(token)
                                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtDurationToken()))
-                                .email(loginRequest.getEmail()).build();
+                                .user(userDtoConverter.convertUserEntityToGetUserDetailsDto(user)).build();
         }
 
         public boolean isLoggedIn() {
