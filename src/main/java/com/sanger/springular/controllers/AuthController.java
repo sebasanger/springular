@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import com.sanger.springular.dto.auth.AuthenticationResponse;
 import com.sanger.springular.dto.auth.LoginRequestDto;
 import com.sanger.springular.dto.auth.RefreshTokenRequestDto;
+import com.sanger.springular.dto.auth.RefreshTokenResponse;
 import com.sanger.springular.dto.auth.ValidateUserDto;
 import com.sanger.springular.dto.auth.ValidateUserTokenDto;
 import com.sanger.springular.dto.user.GetUsersDto;
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
-    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequest) {
+    public RefreshTokenResponse refreshTokens(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
