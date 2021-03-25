@@ -1,5 +1,7 @@
 package com.sanger.springular.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.sanger.springular.dto.auth.ChangeUserPassword;
@@ -42,7 +44,18 @@ public class UserController {
 	private final UserEntityService userEntityService;
 	private final UserDtoConverter userDtoConverter;
 
-	@GetMapping("")
+	@GetMapping("/")
+	public ResponseEntity<?> getUsers() {
+		List<UserEntity> result = userEntityService.findAll();
+
+		if (result.isEmpty()) {
+			throw new UserNotFoundException();
+		} else {
+			return ResponseEntity.ok().body(result);
+		}
+	}
+
+	@GetMapping("/pageable")
 	public ResponseEntity<?> listUsers(
 			@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
 			@RequestParam(defaultValue = "") String filter) {
@@ -71,8 +84,8 @@ public class UserController {
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.newUser(newUser)));
 	}
 
-	@PutMapping("")
-	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user) {
+	@PutMapping("/{id}")
+	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user, @PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateUser(user)));
 
