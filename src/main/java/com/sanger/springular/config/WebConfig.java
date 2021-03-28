@@ -25,8 +25,7 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200", "https://segasa-sangular.herokuapp.com/")
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200", "https://segasa-sangular.web.app")
                         .allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
                 ;
             }
