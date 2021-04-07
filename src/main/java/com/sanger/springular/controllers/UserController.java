@@ -84,8 +84,8 @@ public class UserController {
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.newUser(newUser)));
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user, @PathVariable Long id) {
+	@PutMapping("")
+	public ResponseEntity<GetUsersDto> updateUser(@Valid @RequestBody UpdateUserDto user) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(userDtoConverter.convertUserEntityToGetUserDto(userEntityService.updateUser(user)));
 
