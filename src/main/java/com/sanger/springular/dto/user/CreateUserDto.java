@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import com.sanger.springular.model.UserRole;
 
@@ -25,13 +26,14 @@ public class CreateUserDto {
 	private String avatar;
 
 	@NotBlank
-	@Length(min = 5, max = 50, message = "minimo de caracteres 5 y maximo 50")
+	@Length(min = 5, max = 50, message = "El nombre debe tener un minimo de caracteres 5 y maximo 50")
 	private String fullName;
 
 	@NotBlank
 	@Email(message = "Tiene que ser un email valido")
 	private String email;
 
+	@NotEmpty(message = "Debe seleccionar almenos un rol")
 	private Set<UserRole> roles;
 
 	@NotBlank
