@@ -15,6 +15,7 @@ import lombok.Setter;
 @Builder
 public class ValidateUserDto {
 
+    @NotBlank(message = "El token no puede estar vacio")
     private String token;
     @NotBlank
     private String password;
