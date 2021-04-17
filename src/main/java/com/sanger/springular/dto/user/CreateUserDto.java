@@ -26,14 +26,14 @@ public class CreateUserDto {
 	private String avatar;
 
 	@NotBlank
-	@Length(min = 5, max = 50, message = "El nombre debe tener un minimo de caracteres 5 y maximo 50")
+	@Length(min = 5, max = 50)
 	private String fullName;
 
 	@NotBlank
-	@Email(message = "Tiene que ser un email valido")
+	@Email()
 	private String email;
 
-	@NotEmpty(message = "Debe seleccionar almenos un rol")
+	@NotEmpty()
 	private Set<UserRole> roles;
 
 	@NotBlank
