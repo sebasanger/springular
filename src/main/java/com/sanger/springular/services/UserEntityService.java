@@ -1,5 +1,7 @@
 package com.sanger.springular.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import com.sanger.springular.controllers.FilesController;
@@ -40,6 +42,8 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 	private final VerificationTokenService verificationTokenService;
 
 	private final StorageService storageService;
+
+	private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 
 	/**
 	 * Nos permite buscar un usuario por su nombre de usuario
@@ -128,8 +132,13 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
 	}
 
 	public ChangeImageResponseDto uploadAvatarAndDeleteOld(MultipartFile file, Long id) {
+		System.out.println(file.getContentType());
 		if (file.isEmpty()) {
 			throw new StorageException("Image not found");
+		}
+		String fileContentType = file.getContentType();
+		if (!contentTypes.contains(fileContentType)) {
+			throw new StorageException("Image type error");
 		}
 
 		String urlImage = null;
